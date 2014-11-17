@@ -5,7 +5,7 @@ class ApplicationPolicy
     @user = user
     @record = record
   end
-# byebug
+
   def index?
     false
   end

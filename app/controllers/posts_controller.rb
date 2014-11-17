@@ -1,15 +1,16 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
-  # after_action :verify_authorized
+  after_action :verify_authorized
 
   # GET /posts
   # GET /posts.json
   def index
-        session[:current_user_id] = 2
+        session[:current_user_id] = 1
         @id = current_user.id
         @role = current_user.role
 # byebug
     @posts = Post.all
+    # Will apply Pundit's PostPolicy (if undefined inherit from application policy)
     authorize @posts
   end
 
@@ -21,6 +22,7 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new
+    authorize @post
   end
 
   # GET /posts/1/edit
@@ -31,6 +33,7 @@ class PostsController < ApplicationController
   # POST /posts.json
   def create
     @post = Post.new(post_params)
+    authorize @post
 
     respond_to do |format|
       if @post.save
